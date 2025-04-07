@@ -1,0 +1,9 @@
+src/
+*.config.js
+*.config.ts
+vite.config.ts
+tsconfig.json
+tsconfig.node.json
+example/
+.vite/
+.DS_Store

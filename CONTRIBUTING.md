@@ -52,5 +52,3 @@ Please be respectful and inclusive. We follow the [Contributor Covenant](https:/
 ---
 
 Happy hacking! 💻✨
-```
-
