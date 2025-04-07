@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom'
+import { vi } from 'vitest';
 
 // Mock localStorage and sessionStorage
 class StorageMock {
@@ -36,9 +37,20 @@ class StorageMock {
 }
 
 // Mock matchMedia
+interface MatchMediaQueryList {
+  matches: boolean;
+  media: string;
+  onchange: ((this: MediaQueryList, ev: MediaQueryListEvent) => any) | null;
+  addListener: (listener: (this: MediaQueryList, ev: MediaQueryListEvent) => any) => void; // Deprecated
+  removeListener: (listener: (this: MediaQueryList, ev: MediaQueryListEvent) => any) => void; // Deprecated
+  addEventListener: (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions) => void;
+  removeEventListener: (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions) => void;
+  dispatchEvent: (event: Event) => boolean;
+}
+
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: vi.fn().mockImplementation(query => ({
+  value: vi.fn().mockImplementation((query: string): MatchMediaQueryList => ({
     matches: false,
     media: query,
     onchange: null,

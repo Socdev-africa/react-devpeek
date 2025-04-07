@@ -72,7 +72,10 @@ describe('useStorageListener', () => {
 describe('useStateAdapters', () => {
     it('connects to state adapters', () => {
         // Create a test store
-        const useTestStore = create(() => ({
+        const useTestStore = create<{
+            count: number;
+            name: string;
+        }>(() => ({
             count: 42,
             name: 'test'
         }));
@@ -81,7 +84,7 @@ describe('useStateAdapters', () => {
             useStateAdapters([
                 {
                     name: 'testStore',
-                    getState: useTestStore.getState
+                    getState: useTestStore.getState as () => Record<string, any>
                 }
             ])
         );
@@ -97,14 +100,14 @@ describe('useStateAdapters', () => {
         // Create a test store
         const useTestStore = create((set) => ({
             count: 0,
-            increment: () => set(state => ({ count: state.count + 1 }))
+            increment: () => set((state: { count: number; }) => ({ count: state.count + 1 }))
         }));
 
         const { result } = renderHook(() =>
             useStateAdapters([
                 {
                     name: 'testStore',
-                    getState: useTestStore.getState
+                    getState: useTestStore.getState as () => Record<string, any>
                 }
             ])
         );

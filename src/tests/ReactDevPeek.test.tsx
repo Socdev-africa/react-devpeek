@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import ReactDevPeek from '../index';
 import { create } from 'zustand';
 
@@ -99,7 +99,18 @@ describe('ReactDevPeek', () => {
 
     it('handles theme switching correctly', () => {
         // Mock the dark mode preference
-        window.matchMedia = vi.fn().mockImplementation(query => ({
+        interface MockMediaQueryList extends MediaQueryList {
+            matches: boolean;
+            media: string;
+            onchange: ((this: MediaQueryList, ev: MediaQueryListEvent) => any) | null;
+            addListener: (listener: (this: MediaQueryList, ev: MediaQueryListEvent) => any) => void;
+            removeListener: (listener: (this: MediaQueryList, ev: MediaQueryListEvent) => any) => void;
+            addEventListener: (type: string, listener: EventListenerOrEventListenerObject) => void;
+            removeEventListener: (type: string, listener: EventListenerOrEventListenerObject) => void;
+            dispatchEvent: (event: Event) => boolean;
+        }
+
+        window.matchMedia = vi.fn().mockImplementation((query: string): MockMediaQueryList => ({
             matches: query === '(prefers-color-scheme: dark)',
             media: query,
             onchange: null,
