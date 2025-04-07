@@ -1,3 +1,4 @@
+// components/StorageViewer.tsx
 import React, { useState } from 'react';
 import { StorageItem } from '../types';
 import { formatValue, truncateString, getStringByteSize, formatBytes } from '../utils/formatters';

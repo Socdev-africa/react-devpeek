@@ -1,3 +1,4 @@
+// components/CustomJsonViewer.tsx
 import React, { useState } from 'react';
 
 interface JsonViewerProps {

@@ -1,3 +1,4 @@
+// components/ToggleButton.tsx
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Position } from '../types';

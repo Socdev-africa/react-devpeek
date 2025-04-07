@@ -1,3 +1,4 @@
+// components/StateViewer.tsx
 import React, { useState } from 'react';
 import CustomJsonViewer from './CustomJsonViewer';
 

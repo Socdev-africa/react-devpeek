@@ -1,12 +1,8 @@
+// hooks/useStateAdapters.ts
 import { useState, useEffect } from 'react';
 import { StateAdapter } from '../types';
 import { isEqual } from 'lodash';
 
-/**
- * Hook that connects to external state adapters
- * @param adapters Array of state adapters
- * @returns An object with the state from each adapter
- */
 export function useStateAdapters(adapters: StateAdapter[] = []) {
   const [adapterStates, setAdapterStates] = useState<Record<string, any>>({});
 

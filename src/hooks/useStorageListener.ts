@@ -1,13 +1,8 @@
+// hooks/useStorageListener.ts
 import { useState, useEffect } from 'react';
 import { StorageItem } from '../types';
 import { tryParseJSON } from '../utils/formatters';
 
-/**
- * Hook that listens for changes to localStorage and sessionStorage
- * @param enableLocalStorage Whether to listen to localStorage
- * @param enableSessionStorage Whether to listen to sessionStorage
- * @returns An array of storage items and methods to manipulate them
- */
 export function useStorageListener(
   enableLocalStorage: boolean = true,
   enableSessionStorage: boolean = true
