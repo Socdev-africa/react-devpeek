@@ -33,13 +33,11 @@ describe('ToggleButton', () => {
             <ToggleButton isOpen={false} onClick={onClickMock} position="top-left" isDarkMode={false} />
         );
 
-        // Wait for the button to be rendered and assert class names
         const button = screen.getByRole('button');
         console.log('CLASSNAMES:', button.className);
         expect(button.className).toMatch(/top-3/);
         expect(button.className).toMatch(/left-3/);
 
-        // Rerender with a new position
         rerender(<ToggleButton isOpen={false} onClick={onClickMock} position="bottom-right" isDarkMode={false} />);
         const button2 = screen.getByRole('button');
         expect(button2.className).toMatch(/bottom-3/);

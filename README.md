@@ -1,209 +1,157 @@
-# Complete Guide to Publishing React DevPeek to npm
+# react-devpeek
 
-## 1. Prepare Your Package
+**A developer tool for debugging React state and local storage**
 
-Before publishing, make sure your package.json is properly configured:
+`react-devpeek` is a React developer tool designed to help developers inspect and debug React state and local storage data directly in the browser. It provides an easy way to view and interact with the state management and storage system of your React application.
 
-```json
-{
-  "name": "react-devpeek",
-  "version": "0.1.0",
-  "description": "A developer tool for debugging React state and local storage",
-  "main": "dist/react-devpeek.umd.js",
-  "module": "dist/react-devpeek.es.js",
-  "types": "dist/index.d.ts",
-  "files": ["dist", "README.md"],
-  "keywords": [
-    "react",
-    "developer-tools",
-    "local-storage",
-    "state-management",
-    "debugging",
-    "zustand",
-    "context-api"
-  ],
-  "author": "Your Name",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/yourusername/react-devpeek.git"
-  },
-  "bugs": {
-    "url": "https://github.com/yourusername/react-devpeek/issues"
-  },
-  "homepage": "https://github.com/yourusername/react-devpeek#readme",
-  "peerDependencies": {
-    "react": ">=16.8.0",
-    "react-dom": ">=16.8.0"
-  }
-}
-```
+## Features
 
-## 2. Update Your README.md
+- View React component states and props.
+- Inspect and manipulate `localStorage` and `sessionStorage` data.
+- Easy-to-use toggle button for opening and closing the DevPeek panel.
+- Integrates seamlessly with React state management libraries like Zustand and Context API.
+- Supports both light and dark mode.
 
-Ensure your README.md contains:
+## Installation
 
-- Clear installation instructions
-- Usage examples
-- API documentation
-- License information
+### With npm
 
-## 3. Test Your Package Locally
-
-Before publishing, test the package locally:
+To install the beta version of `react-devpeek`, use:
 
 ```bash
-# Build the package
-npm run build
-
-# Create a local link
-npm link
-
-# Create a test project
-mkdir test-devpeek
-cd test-devpeek
-npm init -y
-npm install react react-dom
-
-# Link to your local package
-npm link react-devpeek
-
-# Create a simple test app and verify it works
+npm install react-devpeek@beta
 ```
 
-## 4. Publish to npm
-
-Once you're satisfied with your local testing:
+### With yarn
 
 ```bash
-# Login to your npm account
-npm login
-
-# Publish your package
-npm publish
-
-# If you want to publish a beta version
-npm publish --tag beta
+yarn add react-devpeek@beta
 ```
 
-## 5. Publish a Scoped Package (Optional)
+## Usage
 
-If you want to publish under your npm username:
+1. Import and add `ReactDevPeek` to your application.
+   
+   ```tsx
+   import { ReactDevPeek } from 'react-devpeek';
+   ```
 
-```bash
-# Update your package.json name to:
-# "@yourname/react-devpeek"
+2. Add the component in your app, usually at the top level:
 
-# Publish as public
-npm publish --access public
+   ```tsx
+   const App = () => {
+     return (
+       <div>
+         <ReactDevPeek />
+         {/* Your other app components */}
+       </div>
+     );
+   };
+   ```
+
+3. The panel will automatically appear when the toggle button is clicked.
+
+## API
+
+### `ReactDevPeek`
+
+The main component for displaying the developer tool. It automatically connects to the Zustand store or React Context.
+
+#### Props
+
+- `isOpen`: `boolean` (default: `false`)  
+  Whether the DevPeek panel is open or closed.
+  
+- `onClick`: `() => void`  
+  Callback function to handle click events on the toggle button.
+  
+- `position`: `Position` (default: `"bottom-right"`)  
+  Controls the position of the toggle button. Can be one of:
+  - `"top-left"`
+  - `"top-right"`
+  - `"bottom-left"`
+  - `"bottom-right"`
+  
+- `isDarkMode`: `boolean` (default: `false`)  
+  Enables dark mode for the DevPeek panel.
+
+### `ToggleButton`
+
+The button that toggles the panel visibility.
+
+#### Props
+
+- `isOpen`: `boolean`  
+  Whether the panel is open or closed.
+  
+- `onClick`: `() => void`  
+  Function to be called when the button is clicked.
+  
+- `position`: `Position`  
+  Button position.
+  
+- `isDarkMode`: `boolean`  
+  Dark mode option for the button.
+
+## Example
+
+```tsx
+import React, { useState } from 'react';
+import { ReactDevPeek } from 'react-devpeek';
+
+const App = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const togglePanel = () => setIsOpen(!isOpen);
+
+  return (
+    <div>
+      <ReactDevPeek isOpen={isOpen} onClick={togglePanel} position="bottom-right" isDarkMode={false} />
+    </div>
+  );
+};
+
+export default App;
 ```
 
-## 6. Set Up GitHub Pages Demo
+## Development
 
-Create a GitHub Pages demo so users can try your tool:
+To run the package locally and work on the development version:
 
-```bash
-# Build the demo
-npm run build:demo
+1. Clone the repository:
 
-# Deploy to GitHub Pages
-npm install -D gh-pages
-```
+   ```bash
+   git clone https://github.com/Socdev-africa/react-devpeek.git
+   ```
 
-Add to package.json:
+2. Install dependencies:
 
-```json
-"scripts": {
-  "deploy:demo": "gh-pages -d demo/dist"
-}
-```
+   ```bash
+   npm install
+   ```
 
-Then run:
+3. Run the development server:
 
-```bash
-npm run deploy:demo
-```
+   ```bash
+   npm run dev
+   ```
 
-## 7. Set Up NPM Scripts
+4. Build the package:
 
-Update your package.json scripts for a smooth workflow:
+   ```bash
+   npm run build
+   ```
 
-```json
-"scripts": {
-  "dev": "vite",
-  "build": "vite build",
-  "test": "vitest run",
-  "test:watch": "vitest",
-  "test:coverage": "vitest run --coverage",
-  "demo": "vite serve demo --config demo-vite.config.ts",
-  "build:demo": "vite build --config demo-vite.config.ts",
-  "prepublishOnly": "npm run test && npm run build",
-  "deploy:demo": "gh-pages -d demo/dist"
-}
-```
+5. Run the demo:
 
-## 8. Versioning and Releases
+   ```bash
+   npm run demo
+   ```
 
-For updating your package:
+## Contributing
 
-```bash
-# Bump version (patch, minor, or major)
-npm version patch
-# or
-npm version minor
-# or
-npm version major
+Feel free to fork the repository and submit pull requests. If you encounter any issues or have feature requests, please [open an issue](https://github.com/Socdev-africa/react-devpeek/issues).
 
-# Then publish
-npm publish
-```
+## License
 
-## 9. Set Up GitHub Actions for CI/CD
-
-Create a `.github/workflows/npm-publish.yml` file:
-
-```yaml
-name: Node.js Package
-
-on:
-  release:
-    types: [created]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - run: npm ci
-      - run: npm test
-
-  publish-npm:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-          registry-url: https://registry.npmjs.org/
-      - run: npm ci
-      - run: npm run build
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
-```
-
-Remember to add your npm token to your GitHub repository secrets.
-
-## 10. Marketing Your Package
-
-After publishing:
-
-1. Create a post on dev.to or Medium about your package
-2. Share on Twitter/X with relevant hashtags (#react, #javascript, #opensource)
-3. Post to Reddit communities like r/reactjs
-4. Consider submitting to JavaScript/React newsletters
-5. Add to your GitHub profile as a pinned repository
+MIT © [Socdev-africa](https://github.com/Socdev-africa)
