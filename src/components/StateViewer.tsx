@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { JsonView } from 'react-json-view-lite';
-import 'react-json-view-lite/dist/index.css';
+import CustomJsonViewer from './CustomJsonViewer';
 
 interface StateViewerProps {
     stateAdapters: Record<string, any>;
@@ -153,12 +152,10 @@ export const StateViewer: React.FC<StateViewerProps> = ({
 
                             {expandedAdapters.has(adapterName) && (
                                 <div className={`p-2 overflow-auto max-h-96 ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
-                                    <JsonView
+                                    <CustomJsonViewer
                                         data={stateAdapters[adapterName]}
-                                        shouldExpandNode={(level) => level < 2}
-                                        style={{
-                                            container: isDarkMode ? 'background-color: #1f2937;' : 'background-color: #f9fafb;',
-                                        }}
+                                        expandLevel={1}
+                                        theme={isDarkMode ? 'dark' : 'light'}
                                     />
                                 </div>
                             )}

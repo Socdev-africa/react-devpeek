@@ -1,169 +1,209 @@
-# Steps to Production for React DevPeek
+# Complete Guide to Publishing React DevPeek to npm
 
-Here's the complete guide to get your React DevPeek tool production-ready and published to npm:
+## 1. Prepare Your Package
 
-## 1. Complete Implementation
+Before publishing, make sure your package.json is properly configured:
 
-Make sure all the code files provided are properly implemented and the structure matches what we've outlined.
+```json
+{
+  "name": "react-devpeek",
+  "version": "0.1.0",
+  "description": "A developer tool for debugging React state and local storage",
+  "main": "dist/react-devpeek.umd.js",
+  "module": "dist/react-devpeek.es.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist", "README.md"],
+  "keywords": [
+    "react",
+    "developer-tools",
+    "local-storage",
+    "state-management",
+    "debugging",
+    "zustand",
+    "context-api"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/react-devpeek.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/react-devpeek/issues"
+  },
+  "homepage": "https://github.com/yourusername/react-devpeek#readme",
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  }
+}
+```
 
-## 2. Setup Type Declarations
+## 2. Update Your README.md
 
-Create a file called `vite.config.ts` with the build configuration we provided, including the library build setup.
+Ensure your README.md contains:
 
-## 3. Testing Your Package Locally
+- Clear installation instructions
+- Usage examples
+- API documentation
+- License information
 
-Before publishing, test your package locally:
+## 3. Test Your Package Locally
+
+Before publishing, test the package locally:
 
 ```bash
 # Build the package
 npm run build
 
-# Create a test link
+# Create a local link
 npm link
 
-# In another project directory
+# Create a test project
+mkdir test-devpeek
+cd test-devpeek
+npm init -y
+npm install react react-dom
+
+# Link to your local package
 npm link react-devpeek
+
+# Create a simple test app and verify it works
 ```
 
-## 4. Prepare Documentation
+## 4. Publish to npm
 
-Add comprehensive documentation to your README.md:
-
-```markdown
-# React DevPeek
-
-A powerful debugging tool for React applications that provides visibility into local storage, session storage, and application state.
-
-## Features
-
-- 🔍 **Storage Debugging**: View, edit, and manage localStorage and sessionStorage
-- 🧠 **State Inspection**: Connect to Zustand, Context API, Redux and other state containers
-- 🌓 **Light/Dark Mode**: Automatically adapts to system preferences or set manually
-- 📱 **Developer-Friendly**: Draggable interface, collapsible panels, and search functionality
-- 🛡️ **Production Safe**: Only visible in development mode by default
-
-## Installation
+Once you're satisfied with your local testing:
 
 ```bash
-npm install react-devpeek
-# or
-yarn add react-devpeek
-```
-
-## Basic Usage
-
-```jsx
-import React from 'react';
-import ReactDevPeek from 'react-devpeek';
-
-function App() {
-  return (
-    <div className="App">
-      {/* Your app content */}
-      
-      {/* Add DevPeek (only visible in development) */}
-      <ReactDevPeek />
-    </div>
-  );
-}
-```
-
-## Connecting State
-
-```jsx
-import React from 'react';
-import ReactDevPeek from 'react-devpeek';
-import useMyStore from './store';
-
-function App() {
-  return (
-    <div className="App">
-      
-      <ReactDevPeek 
-        stateAdapters={[
-          { 
-            name: 'myStore',
-            getState: useMyStore.getState,
-            subscribe: useMyStore.subscribe
-          }
-        ]}
-      />
-    </div>
-  );
-}
-```
-
-## Props
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `showInProduction` | boolean | `false` | Show DevPeek in production builds |
-| `position` | string | `'bottom-right'` | Position of toggle button |
-| `theme` | string | `'system'` | Color theme ('light', 'dark', 'system') |
-| `defaultOpen` | boolean | `false` | Whether panel is open by default |
-| `stateAdapters` | array | `[]` | Connected state containers |
-| `enableLocalStorage` | boolean | `true` | Enable localStorage debugging |
-| `enableSessionStorage` | boolean | `true` | Enable sessionStorage debugging |
-
-## License
-
-MIT
-```
-
-## 5. Preparing for npm Publishing
-
-Update your package.json with final details:
-
-1. Ensure the name is available (`npm search react-devpeek`)
-2. Update author, repository, and homepage information
-3. Double-check dependencies and peer dependencies
-
-## 6. Building for Production
-
-Run the final build:
-
-```bash
-npm run build
-```
-
-This will create distributable files in the `dist/` directory.
-
-## 7. Publishing to npm
-
-```bash
-# Login to npm (you'll need an account)
+# Login to your npm account
 npm login
 
-# Publish package
+# Publish your package
+npm publish
+
+# If you want to publish a beta version
+npm publish --tag beta
+```
+
+## 5. Publish a Scoped Package (Optional)
+
+If you want to publish under your npm username:
+
+```bash
+# Update your package.json name to:
+# "@yourname/react-devpeek"
+
+# Publish as public
+npm publish --access public
+```
+
+## 6. Set Up GitHub Pages Demo
+
+Create a GitHub Pages demo so users can try your tool:
+
+```bash
+# Build the demo
+npm run build:demo
+
+# Deploy to GitHub Pages
+npm install -D gh-pages
+```
+
+Add to package.json:
+
+```json
+"scripts": {
+  "deploy:demo": "gh-pages -d demo/dist"
+}
+```
+
+Then run:
+
+```bash
+npm run deploy:demo
+```
+
+## 7. Set Up NPM Scripts
+
+Update your package.json scripts for a smooth workflow:
+
+```json
+"scripts": {
+  "dev": "vite",
+  "build": "vite build",
+  "test": "vitest run",
+  "test:watch": "vitest",
+  "test:coverage": "vitest run --coverage",
+  "demo": "vite serve demo --config demo-vite.config.ts",
+  "build:demo": "vite build --config demo-vite.config.ts",
+  "prepublishOnly": "npm run test && npm run build",
+  "deploy:demo": "gh-pages -d demo/dist"
+}
+```
+
+## 8. Versioning and Releases
+
+For updating your package:
+
+```bash
+# Bump version (patch, minor, or major)
+npm version patch
+# or
+npm version minor
+# or
+npm version major
+
+# Then publish
 npm publish
 ```
 
-If you want to test your package before making it public:
+## 9. Set Up GitHub Actions for CI/CD
 
-```bash
-npm publish --access=public --tag=beta
+Create a `.github/workflows/npm-publish.yml` file:
+
+```yaml
+name: Node.js Package
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: npm ci
+      - run: npm test
+
+  publish-npm:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: https://registry.npmjs.org/
+      - run: npm ci
+      - run: npm run build
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
 ```
 
-## 8. Promoting Your Project
+Remember to add your npm token to your GitHub repository secrets.
 
-- Create a GitHub repository with the complete code
-- Add a demo/examples in a Storybook or CodeSandbox
-- Share on forums like Reddit /r/reactjs, dev.to, and Twitter/X
-- Consider submitting to product hunt when ready
+## 10. Marketing Your Package
 
-## 9. Ongoing Maintenance
+After publishing:
 
-- Set up GitHub Actions for CI/CD
-- Add tests using Jest and React Testing Library
-- Create a roadmap for future features
-- Keep up with React ecosystem changes
-
-## 10. Getting Feedback
-
-- Add GitHub issues template for bug reports and feature requests
-- Create a Discord or Slack channel for community support
-- Add analytics to track usage (optional)
-
----
-
-With these steps, you'll have a professional, production-ready open-source package that provides value to React developers and showcases your skills!
+1. Create a post on dev.to or Medium about your package
+2. Share on Twitter/X with relevant hashtags (#react, #javascript, #opensource)
+3. Post to Reddit communities like r/reactjs
+4. Consider submitting to JavaScript/React newsletters
+5. Add to your GitHub profile as a pinned repository

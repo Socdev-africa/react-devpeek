@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { StorageItem } from '../types';
 import { formatValue, truncateString, getStringByteSize, formatBytes } from '../utils/formatters';
-import { JsonView } from 'react-json-view-lite';
-import 'react-json-view-lite/dist/index.css';
+import CustomJsonViewer from './CustomJsonViewer';
 
 interface StorageViewerProps {
     items: StorageItem[];
@@ -182,12 +181,10 @@ export const StorageViewer: React.FC<StorageViewerProps> = ({
 
                             {expandedItems.has(`${item.type}-${item.key}`) && (
                                 <div className="mt-2 p-2 rounded font-mono text-xs overflow-auto max-h-60">
-                                    <JsonView
+                                    <CustomJsonViewer
                                         data={parseItemValue(item)}
-                                        shouldExpandNode={() => true}
-                                        style={{
-                                            container: isDarkMode ? 'background-color: #1f2937;' : 'background-color: #f9fafb;',
-                                        }}
+                                        expandLevel={2}
+                                        theme={isDarkMode ? 'dark' : 'light'}
                                     />
                                 </div>
                             )}
