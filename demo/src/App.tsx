@@ -1,73 +1,128 @@
-// demo/src/App.tsx
-import React, { useEffect } from 'react';
+// src/App.tsx
 import ReactDevPeek from '../../src/index';
-import { create } from 'zustand';
+import { Theme } from '../../src/types';
+// src/App.tsx
+import React, { useState, useEffect } from 'react';
+import { Provider } from 'react-redux';
+import { ThemeProvider } from './contexts/ThemeContext';
+// Store imports (we'll create these files separately)
+import { useUserStore, useProductsStore, useCartStore, useAnalyticsStore } from './stores';
+import { reduxStore } from './redux/store';
 
-// Create a Zustand store
-interface TestStoreState {
-    count: number;
-    increment: () => void;
-    decrement: () => void;
-}
+// Component imports
+import Header from './components/common/Header';
+import TabNavigation from './components/common/TabNavigation';
 
-const useTestStore = create<TestStoreState>((set) => ({
-    count: 0,
-    increment: () => set((state) => ({ count: state.count + 1 })),
-    decrement: () => set((state) => ({ count: state.count - 1 })),
-}));
 
-function App() {
-    // Set some localStorage items
+// Global CSS
+import './index.css';
+import ProductsView from './components/Products';
+import CounterView from './components/counter';
+import TodoView from './components/todo';
+import FormView from './components/FormDemo';
+import AnalyticsView from './components/Analytics';
+
+const App: React.FC = () => {
+    // State for active tab
+    const [activeTab, setActiveTab] = useState<string>('products');
+
+    // Initialize analytics and product data
     useEffect(() => {
-        localStorage.setItem('testString', 'Hello world');
-        localStorage.setItem('testNumber', '42');
-        localStorage.setItem('testObject', JSON.stringify({ name: 'Test', value: 123 }));
+        // Initialize analytics data
+        useAnalyticsStore.getState().refreshData();
 
-        sessionStorage.setItem('sessionTest', 'Session value');
+        // Fetch products
+        useProductsStore.getState().fetchProducts();
+
+        // Set localStorage items for demo
+        localStorage.setItem('app_version', '1.5.3');
+        localStorage.setItem('feature_flags', JSON.stringify({
+            newDashboard: true,
+            betaFeatures: true,
+            experimentalApi: false,
+            performanceMode: true
+        }));
+
+        // Set sessionStorage items
+        sessionStorage.setItem('session_id', `sess_${Math.random().toString(36).substring(2, 15)}`);
+        sessionStorage.setItem('csrf_token', `csrf_${Math.random().toString(36).substring(2, 15)}`);
     }, []);
 
+    // Define tabs
+    const tabs = [
+        { id: 'products', label: 'Products', icon: '🛍️' },
+        { id: 'counter', label: 'Counter', icon: '🔢' },
+        { id: 'todo', label: 'Todo List', icon: '✅' },
+        { id: 'form', label: 'Form Demo', icon: '📝' },
+        { id: 'analytics', label: 'Analytics', icon: '📊' },
+    ];
+
     return (
-        <div className="p-8">
-            <h1 className="text-2xl font-bold mb-4">React DevPeek Demo</h1>
+        <ThemeProvider>
+            <Provider store={reduxStore}>
+                <div className="app">
+                    <Header title="React devpeek demo app" />
 
-            <div className="mb-4">
-                <button
-                    className="px-4 py-2 bg-blue-500 text-white rounded mr-2"
-                    onClick={() => useTestStore.getState().increment()}
-                >
-                    Increment
-                </button>
-                <button
-                    className="px-4 py-2 bg-red-500 text-white rounded"
-                    onClick={() => useTestStore.getState().decrement()}
-                >
-                    Decrement
-                </button>
-            </div>
+                    <main className="main-content">
+                        <TabNavigation
+                            tabs={tabs}
+                            activeTab={activeTab}
+                            onChange={setActiveTab}
+                            variant="segmented"
+                        />
 
-            <div className="mb-4">
-                <button
-                    className="px-4 py-2 bg-green-500 text-white rounded"
-                    onClick={() => localStorage.setItem('random', Math.random().toString())}
-                >
-                    Add Random Value
-                </button>
-            </div>
+                        {/* Tab content */}
+                        <div className="tab-content">
+                            {activeTab === 'products' && <ProductsView />}
+                            {activeTab === 'counter' && <CounterView />}
+                            {activeTab === 'todo' && <TodoView />}
+                            {activeTab === 'form' && <FormView />}
+                            {activeTab === 'analytics' && <AnalyticsView />}
+                        </div>
+                    </main>
 
-            <ReactDevPeek
-                showInProduction={true}
-                position="bottom-right"
-                theme="light"
-                stateAdapters={[
-                    {
-                        name: 'TestStore',
-                        getState: useTestStore.getState,
-                        subscribe: useTestStore.subscribe
-                    }
-                ]}
-            />
-        </div>
+                    {/* ReactDevPeek for development */}
+                    <ReactDevPeek
+                        showInProduction={true}
+                        position="bottom-right"
+                        theme={'system'}
+                        enableLocalStorage={true}
+                        enableSessionStorage={true}
+                        stateAdapters={[
+                            {
+                                name: 'UserStore',
+                                getState: useUserStore.getState,
+                                subscribe: useUserStore.subscribe
+                            },
+                            {
+                                name: 'ProductsStore',
+                                getState: useProductsStore.getState,
+                                subscribe: useProductsStore.subscribe
+                            },
+                            {
+                                name: 'CartStore',
+                                getState: useCartStore.getState,
+                                subscribe: useCartStore.subscribe
+                            },
+                            {
+                                name: 'AnalyticsStore',
+                                getState: useAnalyticsStore.getState,
+                                subscribe: useAnalyticsStore.subscribe
+                            },
+                            {
+                                name: 'ReduxCounter',
+                                getState: () => reduxStore.getState(),
+                                subscribe: (callback) => {
+                                    const unsubscribe = reduxStore.subscribe(callback);
+                                    return unsubscribe;
+                                }
+                            }
+                        ]}
+                    />
+                </div>
+            </Provider>
+        </ThemeProvider>
     );
-}
+};
 
 export default App;

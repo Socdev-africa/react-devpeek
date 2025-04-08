@@ -10,15 +10,16 @@ import { DevPeekProps, Position, Theme } from './types';
 
 import './styles.css';
 
-const ReactDevPeek: React.FC<DevPeekProps> = ({
-    showInProduction = false,
-    position = 'bottom-right',
-    theme = 'system',
-    defaultOpen = false,
-    stateAdapters = [],
-    enableLocalStorage = true,
-    enableSessionStorage = true
-}) => {
+    const ReactDevPeek: React.FC<DevPeekProps> = ({
+        showInProduction = false,
+        position = 'bottom-right',
+        theme = 'system',
+        defaultOpen = false,
+        stateAdapters = [],
+        enableLocalStorage = true,
+        
+        enableSessionStorage = true
+    }) => {
     const [isOpen, setIsOpen] = useState(defaultOpen);
     const [isDarkMode, setIsDarkMode] = useState(false);
 
