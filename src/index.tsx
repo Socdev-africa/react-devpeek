@@ -1,3 +1,5 @@
+// src/index.tsx
+
 import React, { useState, useEffect } from 'react';
 import { ToggleButton } from './components/ToggleButton';
 import { DebugPanel } from './components/DebugPanel';
