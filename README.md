@@ -4,7 +4,7 @@
 
 `react-devpeek` is a lightweight debugging tool that helps React developers inspect and manipulate state management and browser storage at runtime. It provides an intuitive interface for viewing state snapshots and managing localStorage/sessionStorage directly in your app during development.
 
-![React DevPeek](https://via.placeholder.com/800x400?text=React+DevPeek+Screenshot)
+![React DevPeek](./src/assets/demo.png)
 
 ## Features
 
@@ -30,7 +30,7 @@ pnpm add react-devpeek
 Add the DevPeek component to your application's root component:
 
 ```jsx
-import ReactDevPeek from 'react-devpeek';
+import ReactDevPeek from "react-devpeek";
 
 function App() {
   return (
@@ -49,26 +49,26 @@ DevPeek can connect to any state management library using adapters:
 ### Zustand Example
 
 ```jsx
-import ReactDevPeek from 'react-devpeek';
-import { useCounterStore } from './stores/counterStore';
-import { useUserStore } from './stores/userStore';
+import ReactDevPeek from "react-devpeek";
+import { useCounterStore } from "./stores/counterStore";
+import { useUserStore } from "./stores/userStore";
 
 function App() {
   return (
     <>
       <YourApp />
-      <ReactDevPeek 
+      <ReactDevPeek
         stateAdapters={[
           {
-            name: 'Counter Store',
+            name: "Counter Store",
             getState: useCounterStore.getState,
-            subscribe: useCounterStore.subscribe
+            subscribe: useCounterStore.subscribe,
           },
           {
-            name: 'User Store',
+            name: "User Store",
             getState: useUserStore.getState,
-            subscribe: useUserStore.subscribe
-          }
+            subscribe: useUserStore.subscribe,
+          },
         ]}
       />
     </>
@@ -79,29 +79,27 @@ function App() {
 ### React Context API Example
 
 ```jsx
-import ReactDevPeek from 'react-devpeek';
-import { ThemeContext } from './contexts/ThemeContext';
-import { UserContext } from './contexts/UserContext';
+import ReactDevPeek from "react-devpeek";
+import { ThemeContext } from "./contexts/ThemeContext";
+import { UserContext } from "./contexts/UserContext";
 
 function App() {
   // Create adapters for context
   const themeContextAdapter = {
-    name: 'Theme Context',
+    name: "Theme Context",
     getState: () => React.useContext(ThemeContext),
     // No subscribe method for Context - DevPeek will poll periodically
   };
 
   const userContextAdapter = {
-    name: 'User Context',
+    name: "User Context",
     getState: () => React.useContext(UserContext),
   };
 
   return (
     <>
       <YourApp />
-      <ReactDevPeek 
-        stateAdapters={[themeContextAdapter, userContextAdapter]}
-      />
+      <ReactDevPeek stateAdapters={[themeContextAdapter, userContextAdapter]} />
     </>
   );
 }
@@ -111,15 +109,15 @@ function App() {
 
 The `ReactDevPeek` component accepts the following props:
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `showInProduction` | boolean | `false` | Show DevPeek in production environments |
-| `position` | 'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right' | `'bottom-right'` | Position of the toggle button |
-| `theme` | 'light' \| 'dark' \| 'system' | `'system'` | UI theme |
-| `defaultOpen` | boolean | `false` | Open the panel by default |
-| `stateAdapters` | StateAdapter[] | `[]` | Array of state adapters to connect |
-| `enableLocalStorage` | boolean | `true` | Enable localStorage monitoring |
-| `enableSessionStorage` | boolean | `true` | Enable sessionStorage monitoring |
+| Prop                   | Type                                                         | Default          | Description                             |
+| ---------------------- | ------------------------------------------------------------ | ---------------- | --------------------------------------- |
+| `showInProduction`     | boolean                                                      | `false`          | Show DevPeek in production environments |
+| `position`             | 'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right' | `'bottom-right'` | Position of the toggle button           |
+| `theme`                | 'light' \| 'dark' \| 'system'                                | `'system'`       | UI theme                                |
+| `defaultOpen`          | boolean                                                      | `false`          | Open the panel by default               |
+| `stateAdapters`        | StateAdapter[]                                               | `[]`             | Array of state adapters to connect      |
+| `enableLocalStorage`   | boolean                                                      | `true`           | Enable localStorage monitoring          |
+| `enableSessionStorage` | boolean                                                      | `true`           | Enable sessionStorage monitoring        |
 
 ### StateAdapter Interface
 
@@ -127,10 +125,10 @@ The `ReactDevPeek` component accepts the following props:
 interface StateAdapter {
   // Display name for the adapter
   name: string;
-  
+
   // Function that returns the current state
   getState: () => any;
-  
+
   // Optional subscription function that calls a listener when state changes
   // Should return a function to unsubscribe
   subscribe?: (listener: () => void) => (() => void) | void;
@@ -160,7 +158,7 @@ interface StateAdapter {
 ```jsx
 const [isDevToolOpen, setDevToolOpen] = useState(false);
 
-<ReactDevPeek defaultOpen={isDevToolOpen} />
+<ReactDevPeek defaultOpen={isDevToolOpen} />;
 ```
 
 ### Selective Storage Monitoring
@@ -178,22 +176,26 @@ const [isDevToolOpen, setDevToolOpen] = useState(false);
 To develop locally:
 
 1. Clone the repository
+
    ```bash
    git clone https://github.com/Socdev-africa/react-devpeek.git
    cd react-devpeek
    ```
 
 2. Install dependencies
+
    ```bash
    npm install
    ```
 
 3. Run the demo app
+
    ```bash
    npm run demo
    ```
 
 4. Build the library
+
    ```bash
    npm run build
    ```
@@ -226,8 +228,10 @@ This will start a development server with a demo application showcasing various 
 ## Browser Support
 
 React DevPeek supports all modern browsers including:
+
 - Chrome
 - Firefox
+- Brave
 - Safari
 - Edge
 
