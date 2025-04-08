@@ -241,7 +241,7 @@ MIT © [SocDev Africa](https://github.com/Socdev-africa)
 
 ## Contributors
 
-- [SocDev Africa](https://github.com/Socdev-africa)
+- [Salato](https://github.com/salvatoluice)
 
 ## Acknowledgements
 
